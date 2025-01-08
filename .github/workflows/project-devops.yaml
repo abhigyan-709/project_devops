@@ -22,13 +22,37 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
-      # install docker-compose
+      # Install Terraform
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.6
+
+      # Initialize Terraform
+      - name: Terraform Init
+        run: terraform init -backend-config="bucket=project-devops-state-bucket" \
+                            -backend-config="key=terraform.tfstate" \
+                            -backend-config="region=ap-south-1"
+
+      # Plan Terraform changes
+      - name: Terraform Plan
+        run: terraform plan
+
+      # Apply Terraform changes (only if the plan shows no errors)
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        env:
+          TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      # Install Docker Compose
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version   
+
       # Build the Docker image    
-      - name: Build the test docker image
+      - name: Build the Docker image
         run: docker build -t project-devops -f ./app/Dockerfile ./app
