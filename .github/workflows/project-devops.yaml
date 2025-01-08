@@ -30,10 +30,8 @@ jobs:
 
       # Initialize Terraform
       - name: Terraform Init
-        run: terraform init -backend-config="bucket=project-devops-state-bucket" \
-                            -backend-config="key=terraform.tfstate" \
-                            -backend-config="region=ap-south-1"
-
+        run: terraform init -backend-config="bucket=project-devops-state-bucket" -backend-config="key=terraform.tfstate" -backend-config="region=ap-south-1"
+    
       # Plan Terraform changes
       - name: Terraform Plan
         run: terraform plan
