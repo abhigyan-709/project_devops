@@ -106,6 +106,31 @@ exit
 >
 > ```bash
 > # Enable Authentication in MongoDB Configuration
-> 
-> ```
+> # open the mongodb config file
+> sudo nano /etc/mongod.conf
+>   security:
+>     authorization: "enabled"
+> # change the bindip from 127.0.0.1 to 0.0.0.0
+>   net:
+>     port: 27017
+>     bindIp: 0.0.0.0  # Allow connections from any IP
 >
+> # save and exit 
+> sudo systemctl restart mongod # restart the mongodb service
+> ```
+> 
+
+```bash 
+# edit the .env for custom mongodb uri
+MONGO_URI=mongodb://admin:your_secure_password@3.108.51.102:27017/?authSource=admin
+
+# restart the container after changing the docker-compose file 
+environment: 
+       - .env # MongoDB URI for the FastAPI app
+
+    
+```
+
+### 8. restart the docker-conatiners with new mongodb URI changes
+
+### 9. Pushing the prepared docker image to the contaner registry : AWS ECR
