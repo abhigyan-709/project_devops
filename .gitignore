@@ -27,7 +27,7 @@ override.tf.json
 crash.log
 
 # Ignore sensitive files (like keys)
-
+infrastructure/mongo-key.pem
 # Ignore virtual environment
 venv/
 
