@@ -80,5 +80,32 @@ infrastructure/terraform apply
 ```bash 
 # assuming you have seen how to setup the ec2-mongodb-setup.md
 
+# ssh into your EC2 instance 
+ssh -i "mongo-key.pem" ubuntu@3.108.51.102
+
+# connect to mongodb 
+mongosh
+
+# switch to admin database 
+use admin 
+
+# add the follwing command to add user as admin with desired password
+
+db.createUser({
+  user: "admin",
+  pwd: "your_secure_password",  # Replace with a strong password
+  roles: [{ role: "root", db: "admin" }]
+})
+
+# exit the shell
+exit
 
 ```
+
+> Enable the other settings
+>
+> ```bash
+> # Enable Authentication in MongoDB Configuration
+> 
+> ```
+>
