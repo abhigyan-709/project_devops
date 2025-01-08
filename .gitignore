@@ -1,3 +1,48 @@
 venv/
 app/.env
 
+# Ignore Terraform state files
+infrastructure/.terraform/
+infrastructure/terraform.tfstate
+infrastructure/terraform.tfstate.backup
+
+# Ignore Terraform plan files
+*.tfplan
+
+# Ignore .terraform directory
+infrastructure/.terraform/
+
+# Ignore Terraform lock files
+infrastructure/.terraform.lock.hcl
+
+# Ignore Terraform variable files
+*.tfvars
+*.tfvars.json
+
+# Ignore override files
+override.tf
+override.tf.json
+
+# Ignore crash log files
+crash.log
+
+# Ignore sensitive files (like keys)
+
+# Ignore virtual environment
+venv/
+
+# Ignore environment configuration files
+app/.env
+
+# Ignore backups
+backup/
+
+# Ignore the .terraform folder in the infrastructure directory
+infrastructure/.terraform/
+
+# Ignore the .git directory itself
+
+
+# Ignore other unnecessary files
+*.log
+*.bak

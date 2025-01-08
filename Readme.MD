@@ -19,3 +19,6 @@
 > Step 2
 > 1. Steup the github workflows 
 > 2. Start setup of basic ci-cd 
+
+
+### Setup Commands and Manual Operations of FastAPI
