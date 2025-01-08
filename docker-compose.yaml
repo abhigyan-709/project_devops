@@ -11,7 +11,7 @@ services:
     depends_on:
       - mongodb
     environment:
-      - MONGO_URI=mongodb://mongodb:27017  # MongoDB URI for the FastAPI app
+       - .env # MongoDB URI for the FastAPI app
     networks:
       - app-network
 
