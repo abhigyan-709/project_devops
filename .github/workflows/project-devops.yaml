@@ -21,3 +21,14 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
+
+      # install docker-compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version   
+      # Build the Docker image    
+      - name: Build the test docker image
+        run: docker build -t project-devops -f ./app/Dockerfile ./app
