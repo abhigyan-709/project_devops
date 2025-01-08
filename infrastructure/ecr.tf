@@ -1,8 +1,3 @@
-# Define the AWS provider
-provider "aws" {
-  region = "ap-south-1" # Replace with your desired region
-}
-
 # Create the ECR repository
 resource "aws_ecr_repository" "docker_repo" {
   name = "project-devops" # Replace with your desired repository name
