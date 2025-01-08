@@ -1,0 +1,1 @@
+ecr uri 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops

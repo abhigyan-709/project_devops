@@ -57,3 +57,16 @@ jobs:
       # Build the Docker image    
       - name: Build the Docker image
         run: docker build -t project-devops -f ./app/Dockerfile ./app
+
+        # Log in to Amazon ECR
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+    # Tag the Docker image for ECR
+      - name: Tag the Docker image
+        run: docker tag project-devops:latest 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops:latest
+
+  # Push the Docker image to ECR
+      - name: Push Docker image to ECR
+        run: docker push 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops:latest
