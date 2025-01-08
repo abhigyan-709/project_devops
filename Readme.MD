@@ -15,3 +15,7 @@
 > 1. Prepare the FastAPI App.
 > 2. Prepare the dockerfile & Bind it to the docker image
 > 3. Use 
+
+> Step 2
+> 1. Steup the github workflows 
+> 2. Start setup of basic ci-cd 
