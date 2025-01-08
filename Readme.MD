@@ -1,13 +1,16 @@
 # This repository uses below technoligies to illustrate practical DevOps Practice
 
-1. Python as base programming language
-2. FastAPI for the RestAPI development (this is python based restapi web framework)
-3. Docker to bind the Application in image 
-4. Kubernetes for Container Orchestration, deployment, replicaset devlopment [we will deploy the API in 3 replicaset]
-5. MongoDB for storage of the data, recieved through API CRUD operation 
-6. AWS EC2, ECR, EKS, S3, IAM, Cloudwatch & other required managed services
-7. Terraform for infrastructure provisioning & management 
-8. GitHub Actions for CI-CD pipelines 
+# Technology Stack
+
+- ![Python](https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg) **Python**: Base programming language.
+- ![FastAPI](https://fastapi.tiangolo.com/img/logo-margin/logo-teal.png) **FastAPI**: Python-based REST API web framework for API development.
+- ![Docker](https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png) **Docker**: To package the application into a container image.
+- ![Kubernetes](https://kubernetes.io/images/kubernetes-horizontal-color.png) **Kubernetes**: For container orchestration, deployment, and ReplicaSet management. [API deployed in 3 replicasets.]
+- ![MongoDB](https://www.mongodb.com/assets/images/global/favicon.ico) **MongoDB**: For data storage received through API CRUD operations.
+- ![AWS](https://a0.awsstatic.com/libra-css/images/logos/aws_logo_smile_1200x630.png) **AWS**: Services include EC2, ECR, EKS, S3, IAM, CloudWatch, and other managed services.
+- ![Terraform](https://www.terraform.io/assets/images/logo-hashicorp-3f10732f.svg) **Terraform**: For infrastructure provisioning and management.
+- ![GitHub Actions](https://avatars.githubusercontent.com/u/44036562?s=200&v=4) **GitHub Actions**: For CI/CD pipelines.
+
 
 ## Setup Commands and Manual Operations of FastAPI
 
