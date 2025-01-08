@@ -9,21 +9,9 @@
 7. Terraform for infrastructure provisioning & management 
 8. GitHub Actions for CI-CD pipelines 
 
-## Details of Project DevOps
+## Setup Commands and Manual Operations of FastAPI
 
-> Step 1
-> 1. Prepare the FastAPI App.
-> 2. Prepare the dockerfile & Bind it to the docker image
-> 3. Use 
-
-> Step 2
-> 1. Steup the github workflows 
-> 2. Start setup of basic ci-cd 
-
-
-### Setup Commands and Manual Operations of FastAPI
-
-1. Activate the virtual environment
+### 1. Activate the virtual environment
 ```bash 
 # considering the mac system as the code is developed in mac environment
 python3 -m venv venv
@@ -31,13 +19,13 @@ python3 -m venv venv
 source ./venv/bin/activate
 ```
 
-2. Clone the Code
+### 2. Clone the Code
 ```bash 
 # use the below link to clone the file in your local environment
 git clone git@github.com:abhigyan-709/project_devops.git
 ```
 
-3. Test the code locally by preparing the Docker Image
+### 3. Test the code locally by preparing the Docker Image
 ```bash 
 # two ways to run the code, either just prepare the docker image [preferred way]
 # use the directory /your-project/project-devops/app/Dockerfile or just make sure you are in dockerfile location
@@ -52,7 +40,7 @@ docker run -d -p 8000:8000 project-devops
 > project-devops is the tag name for the image I have used, you can use any of your desired name
 > Docker Deamon should be running in your local system, if its not available please use official docker website to download it
 
-4. Test the working of API with AWS or Locally with docker-compose
+### 4. Test the working of API with AWS or Locally with docker-compose
 ```bash 
 # run the app with docker-compose with live or containerised mongodb in your local system
 # if you are intended to run the application in the multicontainer 
@@ -65,7 +53,7 @@ root-dir/docker-compose up -d #-d is for deatching the container from the termin
 
 Here I am using AWS EC2 Instance for MongoDB database storage, you can also add docker-compose.yaml service, or in this same project i am demonstrating this.
 
-5. Setup the AWS CLI and Configure the AWS ID | Assuming you already have AWS Free Tier Limit Account
+### 5. Setup the AWS CLI and Configure the AWS ID | Assuming you already have AWS Free Tier Limit Account
 ```bash 
 # get the AWS ACCESS ID & Secret by creating manually via AWS console in AWS IAM indentity center.
 # be cautious to not to store the root ID in AWS CLI, for test purpose i have done so, and I have already reset those keys
@@ -75,4 +63,18 @@ AWS Secret Access Key [***********]:
 Default region name [ap-south-1] # my region is ap-south-1(mumbai) change it accordingly
 Default output format [None]: # json or txt
 ```
-6. Provision the infrastructure with 
+### 6. Provision the infrastructure with terraform
+
+```bash 
+# assuming you have seen how to setup the terrafrom in your local device first
+infrastructure/terraform init
+infrastructure/terraform plan
+infrastructure/terraform apply
+```
+
+### 7. Connect the ec2 instance to prepare the mongodb in ubuntu instance with authentication mode
+```bash 
+# assuming you have seen how to setup the ec2-mongodb-setup.md
+
+
+```
