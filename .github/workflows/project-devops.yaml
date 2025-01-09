@@ -82,3 +82,10 @@ jobs:
   # Push the Docker image to ECR
       - name: Push Docker image to ECR
         run: docker push 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops:latest
+
+      - name: Set up SSH key for EC2
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > ec2-key.pem
+          chmod 600 ec2-key.pem
+          eval $(ssh-agent -s)
+          ssh-add ec2-key.pem
