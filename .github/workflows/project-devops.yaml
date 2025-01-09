@@ -59,9 +59,21 @@ jobs:
         run: docker build --build-arg MONGO_URI=${{ secrets.MONGO_URI }} -t project-devops -f ./app/Dockerfile ./app
 
         # Log in to Amazon ECR
+      # Log in to Amazon ECR
       - name: Log in to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: true  # Mask the password
+          registry-type: private
+          skip-logout: false
+        env:
+          AWS_DEFAULT_REGION: ap-south-1
+          AWS_REGION: ap-south-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          TERRAFORM_CLI_PATH: /home/runner/work/_temp/b1489677-1651-4945-b59b-462c2428e206/terraform
+
 
     # Tag the Docker image for ECR
       - name: Tag the Docker image
