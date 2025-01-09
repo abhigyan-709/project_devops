@@ -104,19 +104,15 @@ jobs:
           # SSH into the EC2 instance and retrieve the kubeconfig
           ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com "cat /etc/kubernetes/admin.conf" > kubeconfig
       
+          # Update the kubeconfig to use the public IP instead of the private IP
+          sed -i 's/172.31.39.63/ec2-65-2-47-57.ap-south-1.compute.amazonaws.com/' kubeconfig
+      
           # Set the KUBECONFIG environment variable to use the retrieved kubeconfig
           export KUBECONFIG=kubeconfig
       
-          # Manually set the CA certificate in the kubeconfig (if required)
-          # Ensure that the certificate is properly set in the kubeconfig file.
-          # For example, you can download the CA certificate and add it to the kubeconfig.
-      
-          # Check the contents of the kubeconfig file and validate SSL connection
+          # Check if kubectl is working
           kubectl get nodes --insecure-skip-tls-verify  # Use this flag as a workaround to skip SSL verification
-      
-          # Optionally, you can set the CA certificate manually:
-          # curl -O https://example.com/ca.crt  # Download the CA certificate if needed
-          # kubectl --certificate-authority=ca.crt get nodes
+    
       
 
     
