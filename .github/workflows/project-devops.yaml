@@ -47,12 +47,13 @@ jobs:
           TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  
-  # docker build job
-  docker-build:
-    runs-on: ubuntu-latest
-
-    steps:
+      # Install Docker Compose
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          docker-compose --version   
 
       # Build the Docker image    
       - name: Build the Docker image
@@ -80,6 +81,7 @@ jobs:
       - name: Push Docker image to ECR
         run: docker push 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops:latest
 
+        
   # Deploy job
   deploy:
     runs-on: ubuntu-latest
