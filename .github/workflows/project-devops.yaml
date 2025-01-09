@@ -89,3 +89,26 @@ jobs:
           chmod 600 ec2-key.pem
           eval $(ssh-agent -s)
           ssh-add ec2-key.pem
+
+      # Deploy to Kubernetes on EC2
+      # - name: Deploy to Kubernetes on EC2
+      #   run: |
+      #     # SSH into the EC2 master node and deploy Kubernetes resources
+      #     ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com << 'EOF'
+      #       kubectl apply -f ./k8-deployments/deployment.yaml
+      #       kubectl apply -f ./k8-deployments/services.yaml
+      #     EOF
+
+      - name: Retrieve kubeconfig from EC2
+        run: |
+          # SSH into the EC2 instance and retrieve the kubeconfig
+          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com "cat /etc/kubernetes/admin.conf" > kubeconfig
+    
+          # Set the KUBECONFIG environment variable to use the retrieved kubeconfig
+          export KUBECONFIG=kubeconfig
+    
+          # Test if kubectl is working
+          kubectl get nodes
+
+    
+      
