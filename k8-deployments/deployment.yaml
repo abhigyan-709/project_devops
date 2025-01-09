@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: k8-app-deployment  # Name of the Deployment
 spec:
-  replicas: 1  # Number of Pod replicas
+  replicas: 2  # Number of Pod replicas
   selector:
     matchLabels:
       app: k8-app  # Label used to identify Pods
