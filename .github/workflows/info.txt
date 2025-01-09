@@ -1,0 +1,5 @@
+ip-172-31-39-63   Ready    control-plane   8m21s   v1.28.15
+ubuntu@ip-172-31-39-63:~$ 
+ubuntu@ip-172-31-39-63:~$ kubeadm token create --print-join-command
+kubeadm join 172.31.39.63:6443 --token aft43k.dar590homwoev6sq --discovery-token-ca-cert-hash sha256:ecbef09d9ffe7d4acfcc959623a977619d0c0b3524049cf55024c274bbf2c8fa 
+ubuntu@ip-172-31-39-63:~$ 
