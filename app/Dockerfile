@@ -11,10 +11,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code to the container
-COPY . .
+COPY app .
 
-# Copy the .env file into the container
-COPY .env /app/.env
+# Copy the .env file into the container from the 'app' directory
+COPY app/.env /app/.env
 
 # Expose the port FastAPI runs on
 EXPOSE 8000
