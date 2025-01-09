@@ -1,5 +1,5 @@
 venv/
-
+app/.env
 
 # Ignore Terraform state files
 infrastructure/.terraform/
@@ -32,7 +32,7 @@ infrastructure/mongo-key.pem
 venv/
 
 # Ignore environment configuration files
-
+app/.env
 
 # Ignore backups
 backup/
