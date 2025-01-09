@@ -56,7 +56,7 @@ jobs:
 
       # Build the Docker image    
       - name: Build the Docker image
-        run: docker build -t project-devops -f ./app/Dockerfile ./app
+        run: docker build --build-arg MONGO_URI=${{ secrets.MONGO_URI }} -t project-devops -f ./app/Dockerfile ./app
 
         # Log in to Amazon ECR
       - name: Log in to Amazon ECR

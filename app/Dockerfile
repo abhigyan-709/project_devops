@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code to the container
 COPY . .
 
+ARG MONGO_URI
+ENV MONGO_URI=${MONGO_URI}
+
 # Expose the port FastAPI runs on
 EXPOSE 8000
 

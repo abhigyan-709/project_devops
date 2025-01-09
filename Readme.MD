@@ -91,11 +91,10 @@ use admin
 
 # add the follwing command to add user as admin with desired password
 
-db.createUser({
-  user: "admin",
-  pwd: "your_secure_password",  # Replace with a strong password
-  roles: [{ role: "root", db: "admin" }]
-})
+db.createUser({user: "admin", pwd: "Gyanu1234", roles: [{ role: "root", db: "admin" }]})
+
+db.updateUser("admin", {pwd: "Gyanu1234", roles: [{ role: "root", db: "admin" }]})
+
 
 # exit the shell
 exit

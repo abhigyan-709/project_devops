@@ -10,7 +10,7 @@ class Database:
     db_name: str = "testdb"
 
     def connect(self):
-        mongo_uri = os.environ.get("MONGO_URI")
+        mongo_uri = os.getenv("MONGO_URI")
         if not mongo_uri:
             raise ValueError("MONGO_URI is not set in the environment variables.")
         self.client = MongoClient(mongo_uri)
