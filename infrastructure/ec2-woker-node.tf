@@ -1,5 +1,5 @@
 # Data source for the latest Ubuntu AMI
-data "aws_ami" "ubuntu" {
+data "aws_ami" "ubuntu_worker" {
   most_recent = true
 
   filter {
@@ -15,9 +15,9 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical's AWS Account ID
 }
 
-# Define IAM role for Kubernetes (with Admin access)
-resource "aws_iam_role" "k8s_role" {
-  name = "k8s-role"
+# Define IAM role for Kubernetes Worker (with Admin access)
+resource "aws_iam_role" "k8s_worker_role" {
+  name = "k8s-worker-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -32,21 +32,21 @@ resource "aws_iam_role" "k8s_role" {
   })
 }
 
-# Attach Admin policy to Kubernetes IAM role
-resource "aws_iam_role_policy_attachment" "k8s_admin_policy" {
+# Attach Admin policy to Kubernetes Worker IAM role
+resource "aws_iam_role_policy_attachment" "k8s_worker_admin_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-  role       = aws_iam_role.k8s_role.name
+  role       = aws_iam_role.k8s_worker_role.name
 }
 
-# Define IAM instance profile for Kubernetes
-resource "aws_iam_instance_profile" "k8s_instance_profile" {
-  name = "k8s-instance-profile"
-  role = aws_iam_role.k8s_role.name
+# Define IAM instance profile for Kubernetes Worker
+resource "aws_iam_instance_profile" "k8s_worker_instance_profile" {
+  name = "k8s-worker-instance-profile"
+  role = aws_iam_role.k8s_worker_role.name
 }
 
-# Define Security Group for Kubernetes EC2 instance
-resource "aws_security_group" "k8s_security_group" {
-  name        = "k8s_security_group"
+# Define Security Group for Kubernetes Worker EC2 instance
+resource "aws_security_group" "k8s_worker_security_group" {
+  name        = "k8s-worker-security-group"
   description = "Allow Kubernetes access"
 
   ingress {
@@ -116,13 +116,13 @@ resource "aws_security_group" "k8s_security_group" {
   }
 }
 
-# EC2 instance for Kubernetes worker node
-resource "aws_instance" "ec2-worker-cluster" {
-  ami                    = data.aws_ami.ubuntu.id
+# EC2 instance for Kubernetes Worker node
+resource "aws_instance" "ec2_worker_cluster" {
+  ami                    = data.aws_ami.ubuntu_worker.id
   instance_type          = "t2.micro"
   key_name               = aws_key_pair.mongo_key.key_name
-  security_groups        = [aws_security_group.k8s_security_group.name]
-  iam_instance_profile   = aws_iam_instance_profile.k8s_instance_profile.name
+  security_groups        = [aws_security_group.k8s_worker_security_group.name]
+  iam_instance_profile   = aws_iam_instance_profile.k8s_worker_instance_profile.name
 
   user_data = <<-EOF
     #!/bin/bash
