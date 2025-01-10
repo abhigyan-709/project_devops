@@ -153,6 +153,8 @@ jobs:
         run: |
           # SSH into the EC2 master node and deploy Kubernetes resources
           ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com << 'EOF'
+            kubectl delete -f ./k8-deployments/deployment.yaml --ignore-not-found
+            kubectl delete -f ./k8-deployments/services.yaml --ignore-not-found
             kubectl apply -f ./k8-deployments/deployment.yaml
             kubectl apply -f ./k8-deployments/services.yaml
           EOF
