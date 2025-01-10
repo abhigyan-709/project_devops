@@ -17,13 +17,14 @@ spec:
       containers:
       - name: k8-app-container  # Name of the container
         image: 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops:latest
+        imagePullPolicy: Always  # Always pull the image
         
         ports:
         - containerPort: 8000  # Port exposed by the container
         resources:
           requests:  # Minimum resources required
-            memory: "128Mi"  # Minimum memory (128 MiB)
-            cpu: "250m"      # Minimum CPU (0.25 cores)
+            memory: "256Mi"  # Minimum memory (128 MiB)
+            cpu: "500m"      # Minimum CPU (0.25 cores)
           limits:  # Maximum resources allowed
-            memory: "512Mi"  # Maximum memory (512 MiB)
-            cpu: "500m"      # Maximum CPU (0.5 cores)
+            memory: "1024Mi"  # Maximum memory (512 MiB)
+            cpu: "1000m"      # Maximum CPU (0.5 cores)

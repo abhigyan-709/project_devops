@@ -94,6 +94,7 @@ async def login_for_access_token(
 
 @route2.post("/register/", tags=["User Registration"])
 async def register(user: User, db_client: MongoClient = Depends(db.get_client)):
+    """Register new user"""
     # Check if the username is already taken
     existing_user_username = db_client[db.db_name]["user"].find_one({"username": user.username})
     if existing_user_username:
