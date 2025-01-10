@@ -100,32 +100,32 @@ jobs:
           eval $(ssh-agent -s)
           ssh-add ec2-key.pem
 
-      # Retrieve kubeconfig from EC2
-      - name: Retrieve kubeconfig from EC2
-        run: |
-          # SSH into the EC2 instance and retrieve the kubeconfig
-          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com "cat /etc/kubernetes/admin.conf" > kubeconfig
+      # # Retrieve kubeconfig from EC2
+      # - name: Retrieve kubeconfig from EC2 Master
+      #   run: |
+      #     # SSH into the EC2 instance and retrieve the kubeconfig
+      #     ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com "cat /etc/kubernetes/admin.conf" > kubeconfig
           
-          # Update the kubeconfig to use the public IP instead of the private IP
-          sed -i 's/172.31.39.63/ec2-65-2-47-57.ap-south-1.compute.amazonaws.com/' kubeconfig
+      #     # Update the kubeconfig to use the public IP instead of the private IP
+      #     sed -i 's/172.31.39.63/ec2-65-2-47-57.ap-south-1.compute.amazonaws.com/' kubeconfig
           
-          # Set the KUBECONFIG environment variable to use the retrieved kubeconfig
-          export KUBECONFIG=kubeconfig
+      #     # Set the KUBECONFIG environment variable to use the retrieved kubeconfig
+      #     export KUBECONFIG=kubeconfig
           
-          # Check if kubectl is working
-          kubectl get nodes --insecure-skip-tls-verify  # Use this flag as a workaround to skip SSL verification
+      #     # Check if kubectl is working
+      #     kubectl get nodes --insecure-skip-tls-verify  # Use this flag as a workaround to skip SSL verification
 
-      - name: Copy Kubernetes deployment files to EC2
-        run: |
-          scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/deployment.yaml ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
-          scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/services.yaml ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
+      # - name: Copy Kubernetes deployment files to EC2 Worker Node
+      #   run: |
+      #     scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/deployment.yaml ubuntu@ec2-13-201-226-156.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
+      #     scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/services.yaml ubuntu@ec2-13-201-226-156.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
         
 
-      # Deploy to Kubernetes on EC2
-      - name: Deploy to Kubernetes on EC2
-        run: |
-          # SSH into the EC2 master node and deploy Kubernetes resources
-          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com << 'EOF'
-            kubectl apply -f ./k8-deployments/deployment.yaml
-            kubectl apply -f ./k8-deployments/services.yaml
-          EOF
+      # # Deploy to Kubernetes on EC2
+      # - name: Deploy to Kubernetes on EC2
+      #   run: |
+      #     # SSH into the EC2 master node and deploy Kubernetes resources
+      #     ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com << 'EOF'
+      #       kubectl apply -f ./k8-deployments/deployment.yaml
+      #       kubectl apply -f ./k8-deployments/services.yaml
+      #     EOF
