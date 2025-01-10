@@ -138,7 +138,7 @@ jobs:
         # Create ECR Secret on Worker Node
       - name: Create ECR Secret on Worker Node
         run: |
-          ssh -o StrictHostKeyChecking=no -i "mongo-key.pem" ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com "aws ecr get-login-password --region ap-south-1 | kubectl create secret docker-registry ecr-secret --docker-server=774305585645.dkr.ecr.ap-south-1.amazonaws.com --docker-username=AWS --docker-password-stdin --docker-email=your-email@example.com"
+          ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com "aws ecr get-login-password --region ap-south-1 | kubectl create secret docker-registry ecr-secret --docker-server=774305585645.dkr.ecr.ap-south-1.amazonaws.com --docker-username=AWS --docker-password-stdin --docker-email=your-email@example.com"
 
   
       # # Deploy to Kubernetes on EC2
