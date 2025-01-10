@@ -124,26 +124,6 @@ resource "aws_instance" "ec2_worker_cluster" {
   security_groups        = [aws_security_group.k8s_worker_security_group.name]
   iam_instance_profile   = aws_iam_instance_profile.k8s_worker_instance_profile.name
 
-  user_data = <<-EOF
-    #!/bin/bash
-    set -e
-    # Update and install dependencies
-    sudo apt update
-    sudo apt install -y apt-transport-https ca-certificates curl
-
-    # Add Kubernetes repository and install Kubernetes components
-    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-    sudo tee /etc/apt/sources.list.d/kubernetes.list <<EOF2
-    deb https://apt.kubernetes.io/ kubernetes-xenial main
-    EOF2
-    sudo apt update
-    sudo apt install -y kubelet kubeadm kubectl
-    sudo apt-mark hold kubelet kubeadm kubectl
-
-    # Join the Kubernetes cluster using the kubeadm join command
-    sudo kubeadm join 172.31.39.63:6443 --token aft43k.dar590homwoev6sq --discovery-token-ca-cert-hash sha256:ecbef09d9ffe7d4acfcc959623a977619d0c0b3524049cf55024c274bbf2c8fa
-  EOF
-
   tags = {
     Name        = "K8-Worker-EC2"
     Environment = "Development"
