@@ -6,13 +6,16 @@ on:
       - main  # Trigger on push to the main branch
 
 jobs:
-  # Credential Setup
-  credential-setup:
+  # Build job
+  build:
     runs-on: ubuntu-latest
+
     steps:
+      # Checkout the code from the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Set up AWS credentials to access ECR and Terraform
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -20,32 +23,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
-  # Install Terraform
-  install-terraform:
-    runs-on: ubuntu-latest
-    needs: credential-setup
-    steps:
+      # Install Terraform
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.6
 
-  # Terraform Setup
-  terraform-setup:
-    runs-on: ubuntu-latest
-    needs: install-terraform
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+      # Initialize Terraform
       - name: Terraform Init
         run: terraform init -backend-config="bucket=project-devops-state-bucket" -backend-config="key=terraform.tfstate" -backend-config="region=ap-south-1"
         working-directory: ./infrastructure
 
+      # Plan Terraform changes
       - name: Terraform Plan
         run: terraform plan
         working-directory: ./infrastructure
 
+      # Apply Terraform changes (only if the plan shows no errors)
       - name: Terraform Apply
         run: terraform apply -auto-approve
         working-directory: ./infrastructure
@@ -53,41 +47,52 @@ jobs:
           TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  # Docker Works
-  docker-works:
-    runs-on: ubuntu-latest
-    needs: terraform-setup
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
+      # Install Docker Compose
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
-          docker-compose --version
+          docker-compose --version   
 
+      # Build the Docker image    
       - name: Build the Docker image
         run: docker build --build-arg MONGO_URI=${{ secrets.MONGO_URI }} -t project-devops -f ./app/Dockerfile ./app
 
+      # Log in to Amazon ECR
       - name: Log in to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          mask-password: true  # Mask the password
+          registry-type: private
+          skip-logout: false
+        env:
+          AWS_DEFAULT_REGION: ap-south-1
+          AWS_REGION: ap-south-1
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      # Tag the Docker image
       - name: Tag the Docker image
         run: docker tag project-devops:latest 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops:latest
 
+      # Push Docker image to ECR
       - name: Push Docker image to ECR
         run: docker push 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops:latest
 
-  # Kubernetes Deployments
-  k8-deployments:
+        
+  # Deploy job
+  deploy:
     runs-on: ubuntu-latest
-    needs: docker-works
+    needs: build  # Ensure the deploy job runs after the build job
+
     steps:
+      # Checkout the code from the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Set up SSH key for EC2
       - name: Set up SSH key for EC2
         run: |
           echo "${{ secrets.EC2_SSH_KEY }}" > ec2-key.pem
@@ -95,26 +100,42 @@ jobs:
           eval $(ssh-agent -s)
           ssh-add ec2-key.pem
 
+      # Retrieve kubeconfig from EC2
       - name: Retrieve kubeconfig from EC2 Master
         run: |
+          # SSH into the EC2 instance and retrieve the kubeconfig
           ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-13-201-126-178.ap-south-1.compute.amazonaws.com "sudo cat /etc/kubernetes/admin.conf" > kubeconfig
+          
+          # Update the kubeconfig to use the public IP instead of the private IP
           sed -i 's/172.31.41.132/ec2-13-201-126-178.ap-south-1.compute.amazonaws.com/' kubeconfig
+          
+          # Set the KUBECONFIG environment variable to use the retrieved kubeconfig
           export KUBECONFIG=kubeconfig
-          kubectl get nodes --insecure-skip-tls-verify
+          
+          # Check if kubectl is working
+          kubectl get nodes --insecure-skip-tls-verify  # Use this flag as a workaround to skip SSL verification
 
       - name: Copy Kubernetes deployment files to EC2 Worker Node
         run: |
           scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/deployment.yaml ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
           scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/services.yaml ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
 
+
+        # Install AWS CLI on Worker Node
       - name: Install AWS CLI on Worker Node
         run: |
           ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com << 'EOF'
+            # Update the package repository
             sudo apt-get update
+
+            # Install AWS CLI
             sudo apt-get install -y awscli
+
+            # Verify installation
             aws --version
           EOF
-
+    
+        # Create ECR Secret on Worker Node
       - name: Create ECR Secret on Worker Node
         run: |
           ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com \
@@ -125,9 +146,12 @@ jobs:
              --docker-username=AWS \
              --docker-password=\$(cat) \
              --docker-email=your-email@example.com"
+      
 
+      # Deploy to Kubernetes on EC2
       - name: Deploy to Kubernetes on EC2
         run: |
+          # SSH into the EC2 master node and deploy Kubernetes resources
           ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com << 'EOF'
             kubectl apply -f ./k8-deployments/deployment.yaml
             kubectl apply -f ./k8-deployments/services.yaml
