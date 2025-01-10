@@ -152,7 +152,7 @@ jobs:
       - name: Deploy to Kubernetes on EC2
         run: |
           # SSH into the EC2 master node and deploy Kubernetes resources
-          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-2-47-57.ap-south-1.compute.amazonaws.com << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com << 'EOF'
             kubectl apply -f ./k8-deployments/deployment.yaml
             kubectl apply -f ./k8-deployments/services.yaml
           EOF
