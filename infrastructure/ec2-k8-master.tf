@@ -123,6 +123,11 @@ resource "aws_instance" "ec2-master-cluster" {
   security_groups        = [aws_security_group.k8s_security_group.name]
   iam_instance_profile   = aws_iam_instance_profile.k8s_instance_profile.name
 
+  root_block_device {
+    volume_size = 20 # Increase root volume size to 20 GB
+    volume_type = "gp3" # Use General Purpose SSD (gp3) for better performance
+  }
+
   tags = {
     Name        = "K8-Master-EC2"
     Environment = "Development"
