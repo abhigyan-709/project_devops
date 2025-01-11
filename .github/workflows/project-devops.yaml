@@ -3,7 +3,7 @@ name: Docker Build, Push to AWS ECR & Terraform Setup
 on:
   push:
     branches:
-      - main  # Trigger on push to the main branch
+      - JenkinsCICD  # Trigger on push to the main branch
 
 jobs:
   # Build job
