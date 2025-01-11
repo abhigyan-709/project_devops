@@ -156,3 +156,10 @@ jobs:
             kubectl apply -f ./k8-deployments/deployment.yaml
             kubectl apply -f ./k8-deployments/services.yaml
           EOF
+
+
+# the above keys are securely stored in the github secrets & are used in the above workflows.
+# The above workflows are triggered on the push to the main branch of the repository.
+# The above workflows are used to build the docker image, push it to the AWS ECR, and deploy the application on the Kubernetes cluster running on the EC2 instances.
+# The above workflows are used to automate the CI/CD process for the project.
+# The above workflows are used to automate the deployment of the application on the Kubernetes cluster running on the EC2 instances.

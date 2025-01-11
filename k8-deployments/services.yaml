@@ -11,3 +11,5 @@ spec:
     targetPort: 8000  # Port on the container (internal)
     nodePort: 30960 # Port on the Node (external)
   type: NodePort  # Exposes the Service externally on a NodePort
+
+

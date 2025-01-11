@@ -16,8 +16,10 @@ spec:
       - name: ecr-secret
       containers:
       - name: k8-app-container  # Name of the container
-        image: 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops:latest
-        imagePullPolicy: Always  # Always pull the image
+        image: 774305585645.dkr.ecr.ap-south-1.amazonaws.com/project-devops:latest 
+        # dependes upon the ecr-secret created in my 
+        # local system to authenticate with the ECR to pull the image
+        imagePullPolicy: Always  # Always pull the image after the code is pushed to github to refresh the pods
         
         ports:
         - containerPort: 8000  # Port exposed by the container

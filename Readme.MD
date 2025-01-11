@@ -133,5 +133,7 @@ environment:
 ### 8. restart the docker-conatiners with new mongodb URI changes
 
 ### 9. Pushing the prepared docker image to the contaner registry : AWS ECR
+More on the documentation part will be updated in this, accordingly.
+
 
 ### 10. Prepare the github Actions.
