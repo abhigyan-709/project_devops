@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 from database.db import db
 from routes.user import route2
-from routes.user import route2, get_current_user 
+from routes.utilities import route3
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -37,6 +37,7 @@ app.add_middleware(
 
 
 app.include_router(route2)
+app.include_router(route3)
 
 
 if __name__ == "__main__":
