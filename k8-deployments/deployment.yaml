@@ -25,8 +25,8 @@ spec:
         - containerPort: 8000  # Port exposed by the container
         resources:
           requests:  # Minimum resources required
-            memory: "256Mi"  # Minimum memory (128 MiB)
-            cpu: "500m"      # Minimum CPU (0.25 cores)
+            memory: "128Mi"  # Minimum memory (128 MiB)
+            cpu: "250m"      # Minimum CPU (0.25 cores)
           limits:  # Maximum resources allowed
-            memory: "1024Mi"  # Maximum memory (512 MiB)
-            cpu: "1000m"      # Maximum CPU (0.5 cores)
+            memory: "512i"  # Maximum memory (512 MiB)
+            cpu: "500m"      # Maximum CPU (0.5 cores)
