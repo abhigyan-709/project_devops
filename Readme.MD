@@ -20,3 +20,38 @@
 | **Kubernetes**       | For container orchestration and application deployment over pods                                |
 | **Helm Charts**      | For Kubernetes package management and installing packages                                       |
 | **ArgoCD**           | For continuous deployment of the applications                                                   |
+
+
+## How to run this project locally or setup locally for FastAPI testing 
+
+### Clone the Code 
+```bash 
+# use the below link to clone the file in your local environment
+git clone git@github.com:abhigyan-709/project_devops.git
+```
+
+### Option 1 - Setup the Application via Virtual Environment 
+#### Activate the Virtual Environment to run this code
+```bash 
+# considering the mac system as the code is developed in mac environment
+python3 -m venv venv
+# activate the virtual environment
+source ./venv/bin/activate
+```
+
+```bash 
+# intsall the requirements of the application 
+# path/to/requirements.txt directory
+pip3 install -r requirements.txt
+
+> # Setup MongoDB locally  
+> Create the .env file in ./app project directory 
+> Paste the locally hosted mongoDB URI in .env file as
+MONGO_URI=mongodb://localhost:27017/
+
+# Run the application 
+uvicorn run main:app --reload
+```
+
+### Option 2 - Use the docker-compose.yaml for multicontainer application deployment
+
