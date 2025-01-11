@@ -6,6 +6,7 @@ from models.user import User
 from pymongo import MongoClient
 from fastapi.responses import JSONResponse
 from routes.user import get_current_user
+from bson import ObjectId
 
 route3 = APIRouter()
 
@@ -41,12 +42,20 @@ async def get_utilities(current_user: User = Depends(get_current_user), db_clien
 async def get_utilities_by_category(category: str, current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(db.get_client)):
     if current_user.role != "admin":
         return JSONResponse(content={"message": "You are not authorized to perform this action"}, status_code=401)
+    
     try:
-        utilities = db_client[db.db_name]["utilities"].find({"category": category})
-        utilities_list = list(utilities)
+        utilities_cursor = db_client[db.db_name]["utilities"].find({"category": category})
+        
+        # Convert ObjectId to string in the result
+        utilities_list = [
+            {**utility, "_id": str(utility["_id"])} for utility in utilities_cursor
+        ]
+        
         if not utilities_list:
             return JSONResponse(content={"message": f"No utilities found for category {category}"}, status_code=404)
+        
         return JSONResponse(content={"message": "Utilities fetched successfully", "data": utilities_list}, status_code=200)
+    
     except Exception as e:
         logging.error(f"Error fetching utilities by category: {e}")
         return JSONResponse(content={"message": "Error fetching utilities by category", "error": str(e)}, status_code=500)
@@ -65,18 +74,28 @@ async def get_utilities_by_name(name: str, current_user: User = Depends(get_curr
         logging.error(f"Error fetching utilities by name: {e}")
         return JSONResponse(content={"message": "Error fetching utilities by name", "error": str(e)}, status_code=500)
 
-@route3.put("/update_utilities/{name}", tags=["utilities"])
-async def update_utilities(name: str, utility: PythonUtilities, current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(db.get_client)):
+@route3.get("/get_utilities_by_name/{name}", tags=["utilities"])
+async def get_utilities_by_name(name: str, current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(db.get_client)):
     if current_user.role != "admin":
         return JSONResponse(content={"message": "You are not authorized to perform this action"}, status_code=401)
+    
     try:
-        result = db_client[db.db_name]["utilities"].update_one({"name": name}, {"$set": utility.model_dump()})
-        if result.matched_count == 0:
-            return JSONResponse(content={"message": f"No utility found with name {name}"}, status_code=404)
-        return JSONResponse(content={"message": "Utility updated successfully"}, status_code=200)
+        utilities_cursor = db_client[db.db_name]["utilities"].find({"name": name})
+        
+        # Convert ObjectId to string in the result
+        utilities_list = [
+            {**utility, "_id": str(utility["_id"])} for utility in utilities_cursor
+        ]
+        
+        if not utilities_list:
+            return JSONResponse(content={"message": f"No utilities found for name {name}"}, status_code=404)
+        
+        return JSONResponse(content={"message": "Utilities fetched successfully", "data": utilities_list}, status_code=200)
+    
     except Exception as e:
-        logging.error(f"Error updating utility: {e}")
-        return JSONResponse(content={"message": "Error updating utility", "error": str(e)}, status_code=500)
+        logging.error(f"Error fetching utilities by name: {e}")
+        return JSONResponse(content={"message": "Error fetching utilities by name", "error": str(e)}, status_code=500)
+
 
 @route3.delete("/delete_utilities/{name}", tags=["utilities"])
 async def delete_utilities(name: str, current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(db.get_client)):
