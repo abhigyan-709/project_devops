@@ -7,21 +7,35 @@ from pymongo import MongoClient
 from fastapi.responses import JSONResponse
 from routes.user import get_current_user
 from bson import ObjectId
+from typing import List
 
 route3 = APIRouter()
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 
+# @route3.post("/add_utilities", tags=["utilities"])
+# async def add_utilites(utility: PythonUtilities, current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(db.get_client)):
+#     if current_user.role != "admin":
+#         return JSONResponse(content={"message": "You are not authorized to perform this action"}, status_code=401)
+#     try:
+#         db_client[db.db_name]["utilities"].insert_one(utility.model_dump())
+#         return JSONResponse(content={"message": "Utility added successfully"}, status_code=201)
+#     except Exception as e:
+#         logging.error(f"Error adding utility: {e}")
+#         return JSONResponse(content={"message": str(e)}, status_code=500)
+
 @route3.post("/add_utilities", tags=["utilities"])
-async def add_utilites(utility: PythonUtilities, current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(db.get_client)):
+async def add_utilities(utilities: List[PythonUtilities], current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(db.get_client)):
     if current_user.role != "admin":
         return JSONResponse(content={"message": "You are not authorized to perform this action"}, status_code=401)
     try:
-        db_client[db.db_name]["utilities"].insert_one(utility.model_dump())
-        return JSONResponse(content={"message": "Utility added successfully"}, status_code=201)
+        # Insert multiple utilities at once
+        utilities_data = [utility.model_dump() for utility in utilities]
+        db_client[db.db_name]["utilities"].insert_many(utilities_data)
+        return JSONResponse(content={"message": "Utilities added successfully"}, status_code=201)
     except Exception as e:
-        logging.error(f"Error adding utility: {e}")
+        logging.error(f"Error adding utilities: {e}")
         return JSONResponse(content={"message": str(e)}, status_code=500)
 
 @route3.get("/get_utilities", tags=["utilities"])
