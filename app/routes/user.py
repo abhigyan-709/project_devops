@@ -129,21 +129,6 @@ async def read_current_user(current_user: User = Depends(get_current_user), db_c
 
     raise HTTPException(status_code=404, detail="User not found")
 
-@route2.get("/users/{user_id}", response_model=User, tags=["Read User & Current User"])
-async def read_user_by_id(
-    user_id: str,
-    current_user: User = Depends(get_current_user),
-    db_client: MongoClient = Depends(db.get_client)
-):
-    if user_id != str(current_user.id):
-        raise HTTPException(status_code=403, detail="Forbidden: You can only access your own user details")
-
-    user_from_db = db_client[db.db_name]["user"].find_one({"_id": ObjectId(user_id)})
-    
-    if user_from_db:
-        return user_from_db
-
-    raise HTTPException(status_code=404, detail="User not found")
 
 @route2.post("/activate/{user_id}", tags=["Admin Actions"])
 async def activate_user(user_id: str, current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(db.get_client)):
@@ -151,7 +136,8 @@ async def activate_user(user_id: str, current_user: User = Depends(get_current_u
     if current_user.role != "admin":
         raise HTTPException(status_code=403, detail="Forbidden: Admins only")
 
-    user_from_db = db_client[db.db_name]["user"].find_one({"_id": ObjectId(user_id)})
+    # user_from_db = db_client[db.db_name]["user"].find_one({"_id": ObjectId(user_id)})
+    user_from_db = db_client[db.db_name]["user"].find_one({"username": current_user.username})
     
     if not user_from_db:
         raise HTTPException(status_code=404, detail="User not found")
