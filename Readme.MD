@@ -78,3 +78,34 @@ root-dir/docker-compose up -d #-d is for deatching the container from the termin
 ```
 
 
+## Setting up the application on the cloud
+
+### Considering the app is developed & coded
+We will consider the following steps to deploy the application
+
+1. Install the AWS CLI in your local system - refer to the documentation of AWS CLI 
+2. Configure the AWS CLI 
+
+```bash 
+# get the AWS ACCESS ID & Secret by creating manually via AWS console in AWS IAM indentity center.
+# be cautious to not to store the root ID in AWS CLI, for test purpose i have done so, and I have already reset those keys
+aws configure
+AWS Access Key ID [**********]:
+AWS Secret Access Key [***********]:
+Default region name [ap-south-1] # my region is ap-south-1(mumbai) change it accordingly
+Default output format [None]: # json or txt
+```
+
+3. Use the terraform to deploy the application - here for the simplicity of the application deployment I have used the admin privileged policy in AWS
+```bash 
+# SETTING UP THE BACKEDN.tf file for storage of the statefiles in S3
+1. setup backend.tf and s3.tf
+machine@mac project_devops/infrastructure % terraform init
+machine@mac project_devops/infrastructure % terraform plan
+machine@mac project_devops/infrastructure % terraform apply  
+```
+
+We have setup this backend in such a way that we will not face the problem of "Resource Already exists" when we will apply the next terraform setup it will not make a clash
+
+4. Deploying other terraform setups
+
