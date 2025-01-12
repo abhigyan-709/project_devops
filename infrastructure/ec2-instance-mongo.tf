@@ -5,13 +5,10 @@ resource "aws_instance" "mongo_instance" {
   security_groups = [aws_security_group.mongo_security_group.name]
   iam_instance_profile = aws_iam_instance_profile.admin_profile.name
 
-  user_data = <<-EOF
-    #!/bin/bash
-    apt update
-    apt install -y mongodb
-    systemctl start mongodb
-    systemctl enable mongodb
-  EOF
+  root_block_device {
+    volume_size = 20 # Increase root volume size to 20 GB
+    volume_type = "standard" # Use General Purpose SSD (gp2) for better performance
+  }
 
   tags = {
     Name = "MongoDB-EC2"
