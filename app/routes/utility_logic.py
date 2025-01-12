@@ -52,7 +52,8 @@ async def scramble_text_route(text: str, current_user: User = Depends(get_curren
         raise HTTPException(status_code=401, detail="You are not authorized to perform this action")
     
     try:
-        scrambled_text = scrambled_text(text)
+        result = scrambled_text(text)
+        return {"scrambled_text": result}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
