@@ -13,3 +13,7 @@ class PythonUtilities(BaseModel):
 
 class PrimeResponse(BaseModel):
     primes: List[int]
+
+
+class FactorialResponse(BaseModel):
+    factorial: int
