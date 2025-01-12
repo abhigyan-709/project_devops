@@ -20,3 +20,6 @@ class FactorialResponse(BaseModel):
 
 class FibonacciResponse(BaseModel):
     fibonacci_sequence: List[int]
+
+class ScrambleResponse(BaseModel):
+    scrambled_text: str
