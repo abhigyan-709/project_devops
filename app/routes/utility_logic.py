@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from models.utilities import PrimeResponse, FactorialResponse
 from utility_logics.mathematical.prime import generate_prime_numbers 
 from utility_logics.mathematical.factorial import calculate_factorial # Import the function
-from database.db import get_db_client
+# from database.db import db
 from models.user import User
 from routes.user import get_current_user
 from pymongo import MongoClient
@@ -11,7 +11,7 @@ from pymongo import MongoClient
 router4 = APIRouter()
 
 @router4.post("/generate_prime_numbers", response_model=PrimeResponse, tags=["Mathematical Utilities"])
-async def generate_primes(limit: int, current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(get_db_client)):
+async def generate_primes(limit: int, current_user: User = Depends(get_current_user)):
     if current_user.role != "admin":
         raise HTTPException(status_code=401, detail="You are not authorized to perform this action")
     
