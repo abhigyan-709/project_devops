@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
 
@@ -10,3 +10,6 @@ class PythonUtilities(BaseModel):
 
     class Config:
         orm_mode = True
+
+class PrimeResponse(BaseModel):
+    primes: List[int]
