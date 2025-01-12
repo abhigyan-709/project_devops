@@ -63,11 +63,6 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     except jwt.PyJWTError:
         raise credentials_exception
 
-@route2.get("/")
-async def root():
-    # Test MongoDB connection
-    client = db.get_client()
-    return {"message": "Connected to MongoDB successfully!"}
 
 @route2.post("/token", response_model=Token, tags=["Login & Authentication"])
 async def login_for_access_token(
@@ -118,16 +113,6 @@ async def register(user: User, db_client: MongoClient = Depends(db.get_client)):
         return JSONResponse(content=user_dict, status_code=201)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error registering user: {str(e)}")
-
-@route2.get("/users/me", response_model=User, tags=["Read User & Current User"])
-async def read_current_user(current_user: User = Depends(get_current_user), db_client: MongoClient = Depends(db.get_client)):
-    # Use the username from the current_user object to filter the database query
-    user_from_db = db_client[db.db_name]["user"].find_one({"username": current_user.username})
-
-    if user_from_db:
-        return user_from_db
-
-    raise HTTPException(status_code=404, detail="User not found")
 
 
 @route2.post("/activate/{user_id}", tags=["Admin Actions"])
