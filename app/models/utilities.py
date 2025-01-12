@@ -17,3 +17,6 @@ class PrimeResponse(BaseModel):
 
 class FactorialResponse(BaseModel):
     factorial: int
+
+class FibonacciResponse(BaseModel):
+    fibonacci_sequence: List[int]
