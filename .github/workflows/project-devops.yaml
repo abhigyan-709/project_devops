@@ -122,31 +122,31 @@ jobs:
           scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/services.yaml ubuntu@ec2-13-201-83-111.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
 
 
-        # Install AWS CLI on Worker Node
-      - name: Install AWS CLI on Worker Node
+
+      - name: Install and Configure AWS CLI on Worker Node, Create ECR Secret
         run: |
           ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-13-201-83-111.ap-south-1.compute.amazonaws.com << 'EOF'
-            # Update the package repository
+            # Step 1: Update package repository and install AWS CLI
             sudo apt-get update
-
-            # Install AWS CLI
             sudo apt-get install -y awscli
 
-            # Verify installation
-            aws --version
+            # Step 2: Configure AWS CLI with provided credentials (using GitHub secrets)
+            aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
+            aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+            aws configure set region "ap-south-1"
+
+            # Step 3: Create the ECR secret using AWS CLI and kubectl
+            aws ecr get-login-password --region ap-south-1 | \
+            kubectl create secret docker-registry ecr-secret \
+              --docker-server=774305585645.dkr.ecr.ap-south-1.amazonaws.com \
+              --docker-username=AWS \
+              --docker-password=$(cat) \
+              --docker-email=your-email@example.com
+
+            # Step 4: Verify the secret creation
+            kubectl get secret ecr-secret
           EOF
-    
-        # Create ECR Secret on Worker Node
-      # - name: Create ECR Secret on Worker Node
-      #   run: |
-      #     ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-13-201-83-111.ap-south-1.compute.amazonaws.com \
-      #       "kubectl delete secret ecr-secret --ignore-not-found && \
-      #        aws ecr get-login-password --region ap-south-1 | \
-      #        kubectl create secret docker-registry ecr-secret \
-      #        --docker-server=774305585645.dkr.ecr.ap-south-1.amazonaws.com \
-      #        --docker-username=AWS \
-      #        --docker-password=\$(cat) \
-      #        --docker-email=your-email@example.com"
+
       
 
       # # Deploy to Kubernetes on EC2
