@@ -4,7 +4,7 @@ from models.utilities import PrimeResponse, FactorialResponse, FibonacciResponse
 from utility_logics.mathematical.prime import generate_prime_numbers 
 from utility_logics.mathematical.factorial import calculate_factorial
 from utility_logics.mathematical.fibonacci import fibonacci_sequence # Import the function
-from utility_logics.text_strings.scramble import scramble_text
+from utility_logics.text_strings.scramble import scrambled_text
 from models.user import User
 from routes.user import get_current_user
 from pymongo import MongoClient
@@ -52,7 +52,7 @@ async def scramble_text_route(text: str, current_user: User = Depends(get_curren
         raise HTTPException(status_code=401, detail="You are not authorized to perform this action")
     
     try:
-        scrambled_text = scramble_text(text)
+        scrambled_text = scrambled_text(text)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
