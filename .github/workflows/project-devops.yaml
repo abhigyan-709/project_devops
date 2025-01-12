@@ -104,10 +104,10 @@ jobs:
       - name: Retrieve kubeconfig from EC2 Master
         run: |
           # SSH into the EC2 instance and retrieve the kubeconfig
-          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-13-201-126-178.ap-south-1.compute.amazonaws.com "sudo cat /etc/kubernetes/admin.conf" > kubeconfig
+          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-13-201-79-164.ap-south-1.compute.amazonaws.com "sudo cat /etc/kubernetes/admin.conf" > kubeconfig
           
           # Update the kubeconfig to use the public IP instead of the private IP
-          sed -i 's/172.31.41.132/ec2-13-201-126-178.ap-south-1.compute.amazonaws.com/' kubeconfig
+          sed -i 's/172.31.37.113/ec2-13-201-79-164.ap-south-1.compute.amazonaws.com/' kubeconfig
           
           # Set the KUBECONFIG environment variable to use the retrieved kubeconfig
           export KUBECONFIG=kubeconfig
@@ -117,14 +117,14 @@ jobs:
 
       - name: Copy Kubernetes deployment files to EC2 Worker Node
         run: |
-          scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/deployment.yaml ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
-          scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/services.yaml ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
+          scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/deployment.yaml ubuntu@ec2-13-201-83-111.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
+          scp -o StrictHostKeyChecking=no -i ec2-key.pem ./k8-deployments/services.yaml ubuntu@ec2-13-201-83-111.ap-south-1.compute.amazonaws.com:/home/ubuntu/k8-deployments/
 
 
         # Install AWS CLI on Worker Node
       - name: Install AWS CLI on Worker Node
         run: |
-          ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-13-201-83-111.ap-south-1.compute.amazonaws.com << 'EOF'
             # Update the package repository
             sudo apt-get update
 
@@ -136,31 +136,31 @@ jobs:
           EOF
     
         # Create ECR Secret on Worker Node
-      - name: Create ECR Secret on Worker Node
-        run: |
-          ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com \
-            "kubectl delete secret ecr-secret --ignore-not-found && \
-             aws ecr get-login-password --region ap-south-1 | \
-             kubectl create secret docker-registry ecr-secret \
-             --docker-server=774305585645.dkr.ecr.ap-south-1.amazonaws.com \
-             --docker-username=AWS \
-             --docker-password=\$(cat) \
-             --docker-email=your-email@example.com"
+      # - name: Create ECR Secret on Worker Node
+      #   run: |
+      #     ssh -o StrictHostKeyChecking=no -i "ec2-key.pem" ubuntu@ec2-13-201-83-111.ap-south-1.compute.amazonaws.com \
+      #       "kubectl delete secret ecr-secret --ignore-not-found && \
+      #        aws ecr get-login-password --region ap-south-1 | \
+      #        kubectl create secret docker-registry ecr-secret \
+      #        --docker-server=774305585645.dkr.ecr.ap-south-1.amazonaws.com \
+      #        --docker-username=AWS \
+      #        --docker-password=\$(cat) \
+      #        --docker-email=your-email@example.com"
       
 
-      # Deploy to Kubernetes on EC2
-      - name: Deploy to Kubernetes on EC2
-        run: |
-          # SSH into the EC2 master node and deploy Kubernetes resources
-          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com << 'EOF'
-            kubectl delete -f ./k8-deployments/deployment.yaml --ignore-not-found
-            kubectl delete -f ./k8-deployments/services.yaml --ignore-not-found
-            kubectl apply -f ./k8-deployments/deployment.yaml
-            kubectl apply -f ./k8-deployments/services.yaml
-            # kubectl rollout restart deployment k8-app-deployment
-            # you can also use kubectl apply -f ./k8-deployments/ to apply all the resources in the directory
-            # you can also use kubectl rollout restart deployment k8-app-deployment to restart the deployment
-          EOF
+      # # Deploy to Kubernetes on EC2
+      # - name: Deploy to Kubernetes on EC2
+      #   run: |
+      #     # SSH into the EC2 master node and deploy Kubernetes resources
+      #     ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@ec2-65-1-111-131.ap-south-1.compute.amazonaws.com << 'EOF'
+      #       kubectl delete -f ./k8-deployments/deployment.yaml --ignore-not-found
+      #       kubectl delete -f ./k8-deployments/services.yaml --ignore-not-found
+      #       kubectl apply -f ./k8-deployments/deployment.yaml
+      #       kubectl apply -f ./k8-deployments/services.yaml
+      #       # kubectl rollout restart deployment k8-app-deployment
+      #       # you can also use kubectl apply -f ./k8-deployments/ to apply all the resources in the directory
+      #       # you can also use kubectl rollout restart deployment k8-app-deployment to restart the deployment
+      #     EOF
 
 
 # the above keys are securely stored in the github secrets & are used in the above workflows.
