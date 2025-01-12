@@ -26,10 +26,3 @@ class ScrambleResponse(BaseModel):
 
 from pydantic import BaseModel
 
-class DownloadRequest(BaseModel):
-    url: str
-    filename: str
-
-class DownloadResponse(BaseModel):
-    message: str
-    filename: str
