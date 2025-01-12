@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css'; // Assuming you have your CSS here
+import { FaSun, FaMoon } from 'react-icons/fa'; // React icons for sun and moon
+
+// Header component
+
 
 function App() {
   const [formData, setFormData] = useState({
@@ -14,6 +18,22 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Register
   const [token, setToken] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Check for saved theme preference in localStorage
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setIsDarkMode(true);
+    }
+  }, []);
+
+  // Toggle theme
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+    const newTheme = !isDarkMode ? 'dark' : 'light';
+    localStorage.setItem('theme', newTheme); // Save theme preference in localStorage
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,12 +48,21 @@ function App() {
     try {
       if (isLogin) {
         // Handle login
-        const response = await axios.post('http://13.201.83.111:30960/token', {
-          username: formData.username,
-          password: formData.password,
-        });
+        const response = await axios.post(
+          'http://13.201.83.111:30960/token',
+          new URLSearchParams({
+            username: formData.username,
+            password: formData.password,
+          }),
+          {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          }
+        );
+
+        // Save the token and show success message
         setToken(response.data.access_token);
         setErrorMessage('');
+        alert('Login successful!'); // Show success popup
       } else {
         // Handle registration
         const response = await axios.post('http://13.201.83.111:30960/register/', {
@@ -45,7 +74,7 @@ function App() {
           city: formData.city,
         });
         setErrorMessage('');
-        alert('Registration successful!');
+        alert('Registration successful!'); // Show success popup
       }
     } catch (error) {
       // Handle Axios error
@@ -60,11 +89,12 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
+    <div className={`App ${isDarkMode ? 'dark-theme' : 'light-theme'}`}>
+    
+
+      <div className="form-container">
         <h1>{isLogin ? 'Login' : 'Register'}</h1>
         <form className="form" onSubmit={handleSubmit}>
-          {/* Conditional rendering for different form fields */}
           {!isLogin && (
             <>
               <div className="form-group">
@@ -117,18 +147,20 @@ function App() {
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Enter your email"
-              required
-            />
-          </div>
+          {!isLogin && (
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+          )}
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
@@ -148,14 +180,20 @@ function App() {
           </div>
         </form>
 
-        {/* Toggle between Login and Register */}
-        <button onClick={() => setIsLogin(!isLogin)}>
+        <button onClick={() => setIsLogin(!isLogin)} type="submit" className="btn-submit">
           {isLogin ? 'Need an account? Register here' : 'Already have an account? Login here'}
         </button>
 
-        {/* Display error message */}
         {errorMessage && <div className="error-message">{errorMessage}</div>}
-      </header>
+      </div>
+
+      {/* Theme toggle button */}
+      <button className="theme-toggle-btn" onClick={toggleTheme}>
+        <FaSun className="sun-icon" />
+        <FaMoon className="moon-icon" />
+      </button>
+
+      
     </div>
   );
 }

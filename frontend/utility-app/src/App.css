@@ -1,24 +1,47 @@
 .App {
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', Arial, sans-serif;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f4f7fa;
+  background: linear-gradient(135deg, #eee8f4, #4b5058);
+  background-size: 400% 400%;
+  animation: gradientAnimation 10s ease infinite;
+  color: #333;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .form-container {
   background-color: white;
   padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  width: 350px;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
 h2 {
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 20px;
+  color: #444;
+  font-weight: 600;
 }
 
 .form-group {
@@ -29,56 +52,141 @@ h2 {
 label {
   display: block;
   font-size: 14px;
-  margin-bottom: 5px;
-  color: #333;
+  margin-bottom: 8px;
+  color: #555;
+  font-weight: 500;
 }
 
 input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   font-size: 14px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
   box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus {
-  border-color: #007bff;
+  border-color: #6a11cb;
+  box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
   outline: none;
 }
 
 .btn-submit {
   width: 100%;
-  padding: 12px;
-  background-color: #007bff;
+  padding: 14px;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   color: white;
   font-size: 16px;
+  font-weight: 600;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 
 .btn-submit:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+  transform: translateY(-2px);
+}
+
+.btn-submit:active {
+  transform: translateY(0);
 }
 
 .toggle-form {
   margin-top: 20px;
   font-size: 14px;
+  color: #555;
 }
 
 .toggle-link {
-  color: #007bff;
+  color: #6a11cb;
   cursor: pointer;
   text-decoration: underline;
+  font-weight: 500;
 }
 
 .toggle-link:hover {
-  color: #0056b3;
+  color: #2575fc;
 }
 
 .error-message {
-  color: red;
+  margin-top: 20px;
   font-size: 14px;
-  margin-top: 10px;
+  color: #000000;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* Existing styles remain unchanged */
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.light-theme {
+  background-color: #f4f7fa;
+  color: #333;
+}
+
+.dark-theme {
+  background-color: #333;
+  color: #f4f7fa;
+}
+
+/* Floating toggle button styles */
+.theme-toggle-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 1000;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1);
+}
+
+/* Sun and Moon Icons */
+.sun-icon,
+.moon-icon {
+  font-size: 24px;
+  color: #ffcc00; /* Sun color */
+  transition: opacity 0.3s ease;
+}
+
+.moon-icon {
+  color: #4b5058; /* Moon color */
+  opacity: 0;
+}
+
+.dark-theme .sun-icon {
+  opacity: 0;
+}
+
+.dark-theme .moon-icon {
+  opacity: 1;
 }
