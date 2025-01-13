@@ -1,192 +1,193 @@
+/* General Reset */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+}
+
 .App {
-  font-family: 'Poppins', Arial, sans-serif;
+  text-align: center;
+}
+
+/* Header styling */
+.app-header {
+  background-color: #ffffff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  justify-content: center;
+  justify-content: space-between; /* Align left and right */
   align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #eee8f4, #4b5058);
-  background-size: 400% 400%;
-  animation: gradientAnimation 10s ease infinite;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
   color: #333;
 }
 
-@keyframes gradientAnimation {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  padding: 8px 16px;
+  border: none;
+  background-color: #6a11cb;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-btn.active {
+  background-color: #2575fc;
+}
+
+.nav-btn:hover {
+  background-color: #4a90e2;
+}
+
+/* Main Content */
+.main-content {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  padding: 20px;
 }
 
 .form-container {
-  background-color: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  width: 350px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.form-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
 }
 
 h2 {
-  font-size: 28px;
+  font-size: 24px;
   margin-bottom: 20px;
-  color: #444;
-  font-weight: 600;
 }
 
 .form-group {
-  margin-bottom: 20px;
-  text-align: left;
+  margin-bottom: 15px;
 }
 
 label {
   display: block;
-  font-size: 14px;
-  margin-bottom: 8px;
-  color: #555;
-  font-weight: 500;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 input {
   width: 100%;
-  padding: 12px;
-  font-size: 14px;
+  padding: 10px;
   border: 1px solid #ddd;
-  border-radius: 6px;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-input:focus {
-  border-color: #6a11cb;
-  box-shadow: 0 0 5px rgba(106, 17, 203, 0.5);
-  outline: none;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .btn-submit {
   width: 100%;
-  padding: 14px;
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
+  padding: 10px;
   border: none;
-  border-radius: 6px;
+  background-color: #6a11cb;
+  color: white;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .btn-submit:hover {
-  background: linear-gradient(135deg, #2575fc, #6a11cb);
-  transform: translateY(-2px);
-}
-
-.btn-submit:active {
-  transform: translateY(0);
-}
-
-.toggle-form {
-  margin-top: 20px;
-  font-size: 14px;
-  color: #555;
-}
-
-.toggle-link {
-  color: #6a11cb;
-  cursor: pointer;
-  text-decoration: underline;
-  font-weight: 500;
-}
-
-.toggle-link:hover {
-  color: #2575fc;
+  background-color: #2575fc;
 }
 
 .error-message {
-  margin-top: 20px;
+  color: red;
   font-size: 14px;
-  color: #000000;
-  font-weight: 500;
+  margin-top: 10px;
   text-align: center;
-  animation: fadeIn 0.5s ease-in-out;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Footer styling */
+.app-footer {
+  background-color: #f8f9fa;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
 }
 
-
-/* Existing styles remain unchanged */
-
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+.app-footer p {
+  margin: 0;
 }
 
-.light-theme {
-  background-color: #f4f7fa;
-  color: #333;
-}
-
-.dark-theme {
-  background-color: #333;
-  color: #f4f7fa;
-}
-
-/* Floating toggle button styles */
+/* Theme Toggle */
 .theme-toggle-btn {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #fff;
+  background-color: #6a11cb;
   border: none;
+  color: white;
+  padding: 10px;
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: transform 0.3s ease;
-  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
 }
 
 .theme-toggle-btn:hover {
-  transform: scale(1.1);
+  background-color: #2575fc;
 }
 
-/* Sun and Moon Icons */
-.sun-icon,
-.moon-icon {
-  font-size: 24px;
-  color: #ffcc00; /* Sun color */
-  transition: opacity 0.3s ease;
+.sun-icon, .moon-icon {
+  font-size: 20px;
 }
 
-.moon-icon {
-  color: #4b5058; /* Moon color */
-  opacity: 0;
+/* Dark Theme */
+.dark-theme {
+  background-color: #121212;
+  color: white;
 }
 
-.dark-theme .sun-icon {
-  opacity: 0;
+.dark-theme .form-container {
+  background-color: #1e1e1e;
+  color: white;
 }
 
-.dark-theme .moon-icon {
-  opacity: 1;
+.dark-theme input {
+  background-color: #333;
+  color: white;
+}
+
+.dark-theme .btn-submit {
+  background-color: #2575fc;
+}
+
+.dark-theme .btn-submit:hover {
+  background-color: #6a11cb;
+}
+
+/* Logout Button Styling */
+.nav-logout-btn {
+  padding: 8px 16px;
+  border: none;
+  background-color: #6a11cb;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: auto; /* Push to the far right */
+}
+
+.nav-logout-btn:hover {
+  background-color: #4a90e2;
 }
