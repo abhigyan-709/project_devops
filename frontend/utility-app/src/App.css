@@ -4,31 +4,55 @@ body, html {
   padding: 0;
   font-family: Arial, sans-serif;
   box-sizing: border-box;
+  height: 100%;
 }
 
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Minimum height to cover the viewport */
 }
 
+.main-content {
+  flex: 1; /* Allows the main content to take up remaining space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 /* Header styling */
 .app-header {
-  background-color: #ffffff;
+  background-color: #333; /* Default header color */
   padding: 10px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  justify-content: space-between; /* Align left and right */
+  justify-content: space-between;
   align-items: center;
 }
 
+.navbar {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
 .navbar-brand {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
-  color: #333;
+  color: #fff; /* White text color */
+  margin-right: auto;
+  animation: textAnimation 3s infinite; /* Animation */
+}
+
+@keyframes textAnimation {
+  0%, 100% { color: #fff; }
+  50% { color: #6a11cb; }
 }
 
 .nav-buttons {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .nav-btn {
@@ -55,7 +79,6 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to right, #6a11cb, #2575fc);
   padding: 20px;
 }
 
@@ -118,34 +141,33 @@ input {
 
 /* Footer styling */
 .app-footer {
-  background-color: #f8f9fa;
+  background-color: #333;
   padding: 10px;
   text-align: center;
   font-size: 14px;
-  color: #666;
+  color: white;
 }
 
 .app-footer p {
   margin: 0;
+  display: inline-block; /* Align text and button */
 }
 
 /* Theme Toggle */
 .theme-toggle-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #6a11cb;
+  padding: 8px;
   border: none;
+  background-color: transparent;
   color: white;
-  padding: 10px;
-  border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
 }
-
 .theme-toggle-btn:hover {
-  background-color: #2575fc;
+  color: #6a11cb;
 }
 
 .sun-icon, .moon-icon {
@@ -156,6 +178,10 @@ input {
 .dark-theme {
   background-color: #121212;
   color: white;
+}
+
+.dark-theme .app-header {
+  background-color: #1e1e1e; /* Darker header color for dark mode */
 }
 
 .dark-theme .form-container {
@@ -185,7 +211,7 @@ input {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-left: auto; /* Push to the far right */
+  margin-left: 10px;
 }
 
 .nav-logout-btn:hover {

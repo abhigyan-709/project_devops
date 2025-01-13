@@ -88,37 +88,41 @@ function App() {
     <div className={`App ${isDarkMode ? "dark-theme" : "light-theme"}`}>
       {/* Header */}
       <header className="app-header">
-        <nav className="navbar">
-          <h1 className="navbar-brand">Utility App</h1>
-          <div className="nav-buttons">
-            {!token ? (
-              <>
-                <button
-                  className={`nav-btn ${isLogin ? "active" : ""}`}
-                  onClick={() => setIsLogin(true)}
-                >
-                  Login
-                </button>
-                <button
-                  className={`nav-btn ${!isLogin ? "active" : ""}`}
-                  onClick={() => setIsLogin(false)}
-                >
-                  Register
-                </button>
-              </>
-            ) : (
-              <button className="nav-logout-btn" onClick={handleLogout}>
-                Logout
-              </button>
-            )}
-            {/* New Navigation Links */}
-            <button className="nav-btn">Utilities</button>
-            <button className="nav-btn">Downloaders</button>
-            <button className="nav-btn">Job Portal</button>
-            <button className="nav-btn">About Us</button>
-            <button className="nav-btn">Contact Us</button>
-          </div>
-        </nav>
+      <nav className="navbar">
+  <h1 className="navbar-brand">Utility App</h1>
+  <div className="nav-buttons">
+    <button className="nav-btn">Utilities</button>
+    <button className="nav-btn">Downloaders</button>
+    <button className="nav-btn">Job Portal</button>
+    <button className="nav-btn">About Us</button>
+    <button className="nav-btn">Contact Us</button>
+    {!token ? (
+      <>
+        <button
+          className={`nav-btn ${isLogin ? "active" : ""}`}
+          onClick={() => setIsLogin(true)}
+        >
+          Login
+        </button>
+        <button
+          className={`nav-btn ${!isLogin ? "active" : ""}`}
+          onClick={() => setIsLogin(false)}
+        >
+          Register
+        </button>
+      </>
+    ) : (
+      <button className="nav-logout-btn" onClick={handleLogout}>
+        Logout
+      </button>
+    )}
+    {/* Add the theme toggle button here */}
+    <button className="theme-toggle-btn" onClick={toggleTheme}>
+      {isDarkMode ? <FaSun className="sun-icon" /> : <FaMoon className="moon-icon" />}
+    </button>
+  </div>
+</nav>
+
       </header>
 
       {/* Main Content */}
@@ -219,11 +223,6 @@ function App() {
       <footer className="app-footer">
         <p>© 2025 Utility App. All Rights Reserved.</p>
       </footer>
-
-      {/* Theme Toggle */}
-      <button className="theme-toggle-btn" onClick={toggleTheme}>
-        {isDarkMode ? <FaSun className="sun-icon" /> : <FaMoon className="moon-icon" />}
-      </button>
     </div>
   );
 }
