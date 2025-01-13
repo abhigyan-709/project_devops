@@ -5,6 +5,12 @@ import { FaSun, FaMoon } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Carousel } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
 
 function App() {
   const [formData, setFormData] = useState({
@@ -90,54 +96,82 @@ function App() {
 
   return (
     <div className={`App ${isDarkMode ? "dark-theme" : "light-theme"}`}>
-      {/* Header */}
+      {/* Enhanced Header */}
       <header className="app-header">
-        <nav className="navbar">
-          <h1 className="navbar-brand">Utility App</h1>
-          <div className="nav-links">
-            <ul className="nav-menu">
-              <li><a href="#utilities">Utilities</a></li>
-              <li><a href="#downloaders">Downloaders</a></li>
-              <li><a href="#job-portal">Job Portal</a></li>
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#contact">Contact Us</a></li>
-            </ul>
-            <div className="auth-buttons">
-              {!token ? (
-                <>
-                  <button
-                    className="nav-btn"
-                    onClick={() => {
-                      setIsLogin(true);
-                      setShowAuthModal(true);
-                    }}
-                  >
-                    Login
-                  </button>
-                  <button
-                    className="nav-btn"
-                    onClick={() => {
-                      setIsLogin(false);
-                      setShowAuthModal(true);
-                    }}
-                  >
-                    Register
-                  </button>
-                </>
-              ) : (
-                <button className="nav-logout-btn" onClick={handleLogout}>
-                  Logout
-                </button>
-              )}
-              <button className="theme-toggle-btn" onClick={toggleTheme}>
-                {isDarkMode ? <FaSun className="sun-icon" /> : <FaMoon className="moon-icon" />}
-              </button>
-            </div>
-          </div>
-        </nav>
-      </header>
+  <nav className="navbar">
+    <div className="navbar-container">
+      <div className="navbar-brand-section">
+        <h1 className="navbar-brand">Utility App</h1>
+        <div className="navbar-tagline">Your Ultimate Utility Solution</div>
+      </div>
+      
+      <div className="nav-links">
+        <ul className="nav-menu">
+          <li className="nav-item">
+            <a href="#utilities" className="nav-link">
+              <i className="fas fa-tools"></i>
+              Utilities
+            </a>
+          </li>
+          <li className="nav-item">
+            <a href="#downloaders" className="nav-link">
+              <i className="fas fa-download"></i>
+              Downloaders
+            </a>
+          </li>
+          <li className="nav-item">
+            <a href="#job-portal" className="nav-link">
+              <i className="fas fa-briefcase"></i>
+              Job Portal
+            </a>
+          </li>
+          <li className="nav-item">
+            <a href="#about" className="nav-link">
+              <i className="fas fa-info-circle"></i>
+              About Us
+            </a>
+          </li>
+          <li className="nav-item">
+            <a href="#contact" className="nav-link">
+              <i className="fas fa-envelope"></i>
+              Contact
+            </a>
+          </li>
+        </ul>
+      </div>
 
-      {/* Main Content */}
+      <div className="navbar-actions">
+        {!token ? (
+          <>
+            <button className="auth-btn login-btn" onClick={() => {
+              setIsLogin(true);
+              setShowAuthModal(true);
+            }}>
+              <i className="fas fa-sign-in-alt"></i>
+              Login
+            </button>
+            <button className="auth-btn register-btn" onClick={() => {
+              setIsLogin(false);
+              setShowAuthModal(true);
+            }}>
+              <i className="fas fa-user-plus"></i>
+              Register
+            </button>
+          </>
+        ) : (
+          <button className="auth-btn logout-btn" onClick={handleLogout}>
+            <i className="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
+        )}
+        <button className="theme-toggle-btn" onClick={toggleTheme}>
+          {isDarkMode ? <FaSun className="sun-icon" /> : <FaMoon className="moon-icon" />}
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
       <main>
         {/* Hero Section */}
         <section className="hero-section">
@@ -327,9 +361,68 @@ function App() {
         )}
       </main>
 
-      {/* Footer */}
+      {/* Enhanced Footer */}
       <footer className="app-footer">
-        <p>© 2025 Utility App. All Rights Reserved.</p>
+        <div className="footer-content">
+          <div className="footer-section">
+            <h3 className="footer-title">About Us</h3>
+            <p className="footer-description">
+              Utility App provides comprehensive solutions for all your utility needs.
+              We're dedicated to making your life easier with our innovative tools.
+            </p>
+          </div>
+
+          <div className="footer-section">
+            <h3 className="footer-title">Quick Links</h3>
+            <ul className="footer-links">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#services">Services</a></li>
+              <li><a href="#pricing">Pricing</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+
+          <div className="footer-section">
+            <h3 className="footer-title">Contact Info</h3>
+            <ul className="footer-contact">
+              <li>
+                <i className="fas fa-envelope"></i>
+                <a href="mailto:contact@utilityapp.com">contact@utilityapp.com</a>
+              </li>
+              <li>
+                <i className="fas fa-phone"></i>
+                <a href="tel:+1234567890">+1 (234) 567-890</a>
+              </li>
+              <li>
+                <i className="fas fa-map-marker-alt"></i>
+                <span>123 Tech Street, Digital City</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="footer-section">
+            <h3 className="footer-title">Follow Us</h3>
+            <div className="social-links">
+              <a href="#" className="social-link"><i className="fab fa-facebook"></i></a>
+              <a href="#" className="social-link"><i className="fab fa-twitter"></i></a>
+              <a href="#" className="social-link"><i className="fab fa-linkedin"></i></a>
+              <a href="#" className="social-link"><i className="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <div className="footer-bottom-content">
+            <p className="copyright">
+              © {new Date().getFullYear()} Utility App. All Rights Reserved.
+            </p>
+            <div className="footer-bottom-links">
+              <a href="#privacy">Privacy Policy</a>
+              <a href="#terms">Terms of Service</a>
+              <a href="#cookies">Cookie Policy</a>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
