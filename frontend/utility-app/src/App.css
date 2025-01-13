@@ -10,38 +10,38 @@ body, html {
 .App {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Minimum height to cover the viewport */
+  min-height: 100vh;
 }
 
 .main-content {
-  flex: 1; /* Allows the main content to take up remaining space */
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 20px;
 }
+
 /* Header styling */
 .app-header {
-  background-color: #333; /* Default header color */
+  background-color: #333;
   padding: 10px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .navbar {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  padding: 0 20px;
   width: 100%;
 }
 
 .navbar-brand {
   font-size: 32px;
   font-weight: bold;
-  color: #fff; /* White text color */
+  color: #fff;
   margin-right: auto;
-  animation: textAnimation 3s infinite; /* Animation */
+  animation: textAnimation 3s infinite;
 }
 
 @keyframes textAnimation {
@@ -49,10 +49,52 @@ body, html {
   50% { color: #6a11cb; }
 }
 
-.nav-buttons {
+.nav-links {
   display: flex;
-  gap: 10px;
   align-items: center;
+  gap: 20px;
+}
+
+.nav-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 30px;
+}
+
+.nav-menu li a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease;
+  padding: 5px 0;
+  position: relative;
+}
+
+.nav-menu li a:hover {
+  color: #6a11cb;
+}
+
+.nav-menu li a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #6a11cb;
+  transition: width 0.3s ease;
+}
+
+.nav-menu li a:hover::after {
+  width: 100%;
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .nav-btn {
@@ -73,15 +115,7 @@ body, html {
   background-color: #4a90e2;
 }
 
-/* Main Content */
-.main-content {
-  min-height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
+/* Form Container */
 .form-container {
   background: white;
   border-radius: 8px;
@@ -139,7 +173,7 @@ input {
   text-align: center;
 }
 
-/* Footer styling */
+/* Footer */
 .app-footer {
   background-color: #333;
   padding: 10px;
@@ -150,7 +184,6 @@ input {
 
 .app-footer p {
   margin: 0;
-  display: inline-block; /* Align text and button */
 }
 
 /* Theme Toggle */
@@ -166,6 +199,7 @@ input {
   justify-content: center;
   transition: color 0.3s ease;
 }
+
 .theme-toggle-btn:hover {
   color: #6a11cb;
 }
@@ -181,7 +215,7 @@ input {
 }
 
 .dark-theme .app-header {
-  background-color: #1e1e1e; /* Darker header color for dark mode */
+  background-color: #1e1e1e;
 }
 
 .dark-theme .form-container {
@@ -202,7 +236,19 @@ input {
   background-color: #6a11cb;
 }
 
-/* Logout Button Styling */
+.dark-theme .nav-menu li a {
+  color: #fff;
+}
+
+.dark-theme .nav-menu li a:hover {
+  color: #2575fc;
+}
+
+.dark-theme .nav-menu li a::after {
+  background-color: #2575fc;
+}
+
+/* Logout Button */
 .nav-logout-btn {
   padding: 8px 16px;
   border: none;
@@ -211,7 +257,6 @@ input {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-left: 10px;
 }
 
 .nav-logout-btn:hover {

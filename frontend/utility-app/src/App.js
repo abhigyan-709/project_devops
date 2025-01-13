@@ -67,7 +67,7 @@ function App() {
         });
         setErrorMessage("");
         alert("Registration successful! Please log in.");
-        setIsLogin(true); // Switch to login form after successful registration
+        setIsLogin(true);
       }
     } catch (error) {
       if (error.response && error.response.data) {
@@ -86,46 +86,46 @@ function App() {
 
   return (
     <div className={`App ${isDarkMode ? "dark-theme" : "light-theme"}`}>
-      {/* Header */}
       <header className="app-header">
-      <nav className="navbar">
-  <h1 className="navbar-brand">Utility App</h1>
-  <div className="nav-buttons">
-    <button className="nav-btn">Utilities</button>
-    <button className="nav-btn">Downloaders</button>
-    <button className="nav-btn">Job Portal</button>
-    <button className="nav-btn">About Us</button>
-    <button className="nav-btn">Contact Us</button>
-    {!token ? (
-      <>
-        <button
-          className={`nav-btn ${isLogin ? "active" : ""}`}
-          onClick={() => setIsLogin(true)}
-        >
-          Login
-        </button>
-        <button
-          className={`nav-btn ${!isLogin ? "active" : ""}`}
-          onClick={() => setIsLogin(false)}
-        >
-          Register
-        </button>
-      </>
-    ) : (
-      <button className="nav-logout-btn" onClick={handleLogout}>
-        Logout
-      </button>
-    )}
-    {/* Add the theme toggle button here */}
-    <button className="theme-toggle-btn" onClick={toggleTheme}>
-      {isDarkMode ? <FaSun className="sun-icon" /> : <FaMoon className="moon-icon" />}
-    </button>
-  </div>
-</nav>
-
+        <nav className="navbar">
+          <h1 className="navbar-brand">Utility App</h1>
+          <div className="nav-links">
+            <ul className="nav-menu">
+              <li><a href="#utilities">Utilities</a></li>
+              <li><a href="#downloaders">Downloaders</a></li>
+              <li><a href="#job-portal">Job Portal</a></li>
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#contact">Contact Us</a></li>
+            </ul>
+            <div className="auth-buttons">
+              {!token ? (
+                <>
+                  <button
+                    className={`nav-btn ${isLogin ? "active" : ""}`}
+                    onClick={() => setIsLogin(true)}
+                  >
+                    Login
+                  </button>
+                  <button
+                    className={`nav-btn ${!isLogin ? "active" : ""}`}
+                    onClick={() => setIsLogin(false)}
+                  >
+                    Register
+                  </button>
+                </>
+              ) : (
+                <button className="nav-logout-btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              )}
+              <button className="theme-toggle-btn" onClick={toggleTheme}>
+                {isDarkMode ? <FaSun className="sun-icon" /> : <FaMoon className="moon-icon" />}
+              </button>
+            </div>
+          </div>
+        </nav>
       </header>
 
-      {/* Main Content */}
       <main className="main-content">
         {token ? (
           <div className="logout-container">
@@ -219,7 +219,6 @@ function App() {
         )}
       </main>
 
-      {/* Footer */}
       <footer className="app-footer">
         <p>© 2025 Utility App. All Rights Reserved.</p>
       </footer>
