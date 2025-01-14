@@ -11,6 +11,7 @@ import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/600.css';
 import '@fontsource/poppins/700.css';
+import "./context/ThemeContext";
 
 function App() {
   const [formData, setFormData] = useState({
@@ -28,16 +29,16 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setIsDarkMode(true);
-    }
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    setIsDarkMode(savedTheme === "dark");
   }, []);
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
     const newTheme = !isDarkMode ? "dark" : "light";
+    setIsDarkMode(!isDarkMode);
     localStorage.setItem("theme", newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
   };
 
   const handleInputChange = (e) => {
@@ -96,83 +97,83 @@ function App() {
 
   return (
     <div className={`App ${isDarkMode ? "dark-theme" : "light-theme"}`}>
-      {/* Enhanced Header */}
+      {/* Header */}
       <header className="app-header">
-  <nav className="navbar">
-    <div className="navbar-container">
-      <div className="navbar-brand-section">
-        <h1 className="navbar-brand">Utility App</h1>
-        <div className="navbar-tagline">Your Ultimate Utility Solution</div>
-      </div>
-      
-      <div className="nav-links">
-        <ul className="nav-menu">
-          <li className="nav-item">
-            <a href="#utilities" className="nav-link">
-              <i className="fas fa-tools"></i>
-              Utilities
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#downloaders" className="nav-link">
-              <i className="fas fa-download"></i>
-              Downloaders
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#job-portal" className="nav-link">
-              <i className="fas fa-briefcase"></i>
-              Job Portal
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#about" className="nav-link">
-              <i className="fas fa-info-circle"></i>
-              About Us
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#contact" className="nav-link">
-              <i className="fas fa-envelope"></i>
-              Contact
-            </a>
-          </li>
-        </ul>
-      </div>
+        <nav className="navbar">
+          <div className="navbar-container">
+            <div className="navbar-brand-section">
+              <h1 className="navbar-brand">Utility App</h1>
+              <div className="navbar-tagline">Your Ultimate Utility Solution</div>
+            </div>
+            
+            <div className="nav-links">
+              <ul className="nav-menu">
+                <li className="nav-item">
+                  <a href="#utilities" className="nav-link">
+                    <i className="fas fa-tools"></i>
+                    Utilities
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a href="#downloaders" className="nav-link">
+                    <i className="fas fa-download"></i>
+                    Downloaders
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a href="#job-portal" className="nav-link">
+                    <i className="fas fa-briefcase"></i>
+                    Job Portal
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a href="#about" className="nav-link">
+                    <i className="fas fa-info-circle"></i>
+                    About Us
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a href="#contact" className="nav-link">
+                    <i className="fas fa-envelope"></i>
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-      <div className="navbar-actions">
-        {!token ? (
-          <>
-            <button className="auth-btn login-btn" onClick={() => {
-              setIsLogin(true);
-              setShowAuthModal(true);
-            }}>
-              <i className="fas fa-sign-in-alt"></i>
-              Login
-            </button>
-            <button className="auth-btn register-btn" onClick={() => {
-              setIsLogin(false);
-              setShowAuthModal(true);
-            }}>
-              <i className="fas fa-user-plus"></i>
-              Register
-            </button>
-          </>
-        ) : (
-          <button className="auth-btn logout-btn" onClick={handleLogout}>
-            <i className="fas fa-sign-out-alt"></i>
-            Logout
-          </button>
-        )}
-        <button className="theme-toggle-btn" onClick={toggleTheme}>
-          {isDarkMode ? <FaSun className="sun-icon" /> : <FaMoon className="moon-icon" />}
-        </button>
-      </div>
-    </div>
-  </nav>
-</header>
+            <div className="navbar-actions">
+              {!token ? (
+                <>
+                  <button className="auth-btn login-btn" onClick={() => {
+                    setIsLogin(true);
+                    setShowAuthModal(true);
+                  }}>
+                    <i className="fas fa-sign-in-alt"></i>
+                    Login
+                  </button>
+                  <button className="auth-btn register-btn" onClick={() => {
+                    setIsLogin(false);
+                    setShowAuthModal(true);
+                  }}>
+                    <i className="fas fa-user-plus"></i>
+                    Register
+                  </button>
+                </>
+              ) : (
+                <button className="auth-btn logout-btn" onClick={handleLogout}>
+                  <i className="fas fa-sign-out-alt"></i>
+                  Logout
+                </button>
+              )}
+              <button className="theme-toggle-btn" onClick={toggleTheme}>
+                {isDarkMode ? <FaSun className="sun-icon" /> : <FaMoon className="moon-icon" />}
+              </button>
+            </div>
+          </div>
+        </nav>
+      </header>
 
-      <main>
+      <main className="main-content">
         {/* Hero Section */}
         <section className="hero-section">
           <motion.div
@@ -267,161 +268,135 @@ function App() {
             ))}
           </div>
         </section>
+      </main>
 
-        {/* Auth Modal */}
-        {showAuthModal && (
-          <div className="auth-modal">
-            <div className="modal-content">
-              <button className="close-btn" onClick={() => setShowAuthModal(false)}>
-                ×
-              </button>
-              <div className="form-container">
-                <h2>{isLogin ? "Login" : "Register"}</h2>
-                <form onSubmit={handleSubmit}>
-                  {!isLogin && (
-                    <>
-                      <div className="form-group">
-                        <label htmlFor="first_name">First Name</label>
-                        <input
-                          type="text"
-                          id="first_name"
-                          name="first_name"
-                          value={formData.first_name}
-                          onChange={handleInputChange}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="last_name">Last Name</label>
-                        <input
-                          type="text"
-                          id="last_name"
-                          name="last_name"
-                          value={formData.last_name}
-                          onChange={handleInputChange}
-                          required
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="city">City</label>
-                        <input
-                          type="text"
-                          id="city"
-                          name="city"
-                          value={formData.city}
-                          onChange={handleInputChange}
-                          required
-                        />
-                      </div>
-                    </>
-                  )}
-                  <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <input
-                      type="text"
-                      id="username"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  {!isLogin && (
+      {/* Auth Modal */}
+      {showAuthModal && (
+        <div className="auth-modal">
+          <div className="modal-content">
+            <button className="close-btn" onClick={() => setShowAuthModal(false)}>×</button>
+            <div className="form-container">
+              <h2>{isLogin ? "Login" : "Register"}</h2>
+              <form onSubmit={handleSubmit}>
+                {!isLogin && (
+                  <>
                     <div className="form-group">
-                      <label htmlFor="email">Email</label>
+                      <label htmlFor="first_name">First Name</label>
                       <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        value={formData.first_name}
                         onChange={handleInputChange}
                         required
                       />
                     </div>
-                  )}
+                    <div className="form-group">
+                      <label htmlFor="last_name">Last Name</label>
+                      <input
+                        type="text"
+                        id="last_name"
+                        name="last_name"
+                        value={formData.last_name}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="city">City</label>
+                      <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                  </>
+                )}
+                <div className="form-group">
+                  <label htmlFor="username">Username</label>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                {!isLogin && (
                   <div className="form-group">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="email">Email</label>
                     <input
-                      type="password"
-                      id="password"
-                      name="password"
-                      value={formData.password}
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
                       onChange={handleInputChange}
                       required
                     />
                   </div>
-                  <button type="submit" className="btn-submit">
-                    {isLogin ? "Login" : "Register"}
-                  </button>
-                </form>
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
-              </div>
+                )}
+                <div className="form-group">
+                  <label htmlFor="password">Password</label>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <button type="submit" className="btn-submit">
+                  {isLogin ? "Login" : "Register"}
+                </button>
+              </form>
+              {errorMessage && <p className="error-message">{errorMessage}</p>}
             </div>
           </div>
-        )}
-      </main>
+        </div>
+      )}
 
-      {/* Enhanced Footer */}
+      {/* Footer */}
       <footer className="app-footer">
         <div className="footer-content">
           <div className="footer-section">
-            <h3 className="footer-title">About Us</h3>
-            <p className="footer-description">
+            <h3>About Us</h3>
+            <p>
               Utility App provides comprehensive solutions for all your utility needs.
               We're dedicated to making your life easier with our innovative tools.
             </p>
           </div>
-
           <div className="footer-section">
-            <h3 className="footer-title">Quick Links</h3>
-            <ul className="footer-links">
+            <h3>Quick Links</h3>
+            <ul>
               <li><a href="#home">Home</a></li>
               <li><a href="#services">Services</a></li>
               <li><a href="#pricing">Pricing</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
           </div>
-
           <div className="footer-section">
-            <h3 className="footer-title">Contact Info</h3>
-            <ul className="footer-contact">
-              <li>
-                <i className="fas fa-envelope"></i>
-                <a href="mailto:contact@utilityapp.com">contact@utilityapp.com</a>
-              </li>
-              <li>
-                <i className="fas fa-phone"></i>
-                <a href="tel:+1234567890">+1 (234) 567-890</a>
-              </li>
-              <li>
-                <i className="fas fa-map-marker-alt"></i>
-                <span>123 Tech Street, Digital City</span>
-              </li>
-            </ul>
+            <h3>Contact</h3>
+            <p>Email: contact@utilityapp.com</p>
+            <p>Phone: (123) 456-7890</p>
+            <p>Address: 123 Tech Street, Digital City</p>
           </div>
-
           <div className="footer-section">
-            <h3 className="footer-title">Follow Us</h3>
+            <h3>Follow Us</h3>
             <div className="social-links">
-              <a href="#" className="social-link"><i className="fab fa-facebook"></i></a>
-              <a href="#" className="social-link"><i className="fab fa-twitter"></i></a>
-              <a href="#" className="social-link"><i className="fab fa-linkedin"></i></a>
-              <a href="#" className="social-link"><i className="fab fa-github"></i></a>
+              <a href="#"><i className="fab fa-facebook"></i></a>
+              <a href="#"><i className="fab fa-twitter"></i></a>
+              <a href="#"><i className="fab fa-linkedin"></i></a>
+              <a href="#"><i className="fab fa-github"></i></a>
             </div>
           </div>
         </div>
-
         <div className="footer-bottom">
-          <div className="footer-bottom-content">
-            <p className="copyright">
-              © {new Date().getFullYear()} Utility App. All Rights Reserved.
-            </p>
-            <div className="footer-bottom-links">
-              <a href="#privacy">Privacy Policy</a>
-              <a href="#terms">Terms of Service</a>
-              <a href="#cookies">Cookie Policy</a>
-            </div>
-          </div>
+          <p>&copy; {new Date().getFullYear()} Utility App. All rights reserved.</p>
         </div>
       </footer>
     </div>
