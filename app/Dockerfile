@@ -4,6 +4,14 @@ FROM python:3.10-slim
 # Set the working directory inside the container
 WORKDIR /app
 
+# Install FFmpeg and other necessary system dependencies
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    libsm6 \
+    libxext6 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy the requirements file to the container
 COPY requirements.txt .
 
@@ -14,7 +22,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ARG MONGO_URI
+ARG GEMINI_API_KEY
 ENV MONGO_URI=${MONGO_URI}
+ENV GEMINI_API_KEY=${GEMINI_API_KEY}
 
 # Expose the port FastAPI runs on
 EXPOSE 8000

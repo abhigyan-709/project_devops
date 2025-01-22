@@ -24,5 +24,6 @@ class FibonacciResponse(BaseModel):
 class ScrambleResponse(BaseModel):
     scrambled_text: str
 
-from pydantic import BaseModel
+class GeminiResponse(BaseModel):
+    generated_response: str
 
