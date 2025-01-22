@@ -74,6 +74,9 @@ MONGO_URI=mongodb://localhost:27017/
 
 root-dir/docker-compose build
 root-dir/docker-compose up -d #-d is for deatching the container from the terminal
+# or run the docker image by building it
+docker build -t <image-name> .
+docker run --env-file .env -p 8000:8000 app-name
 
 ```
 
