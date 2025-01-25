@@ -1,12 +1,11 @@
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 import os
 import io
 from dotenv import load_dotenv
 import speech_recognition as sr
-from google import genai
+from google.generativeai import configure, generate_text
 from pydub import AudioSegment
 import logging
 
@@ -18,13 +17,11 @@ api_key = os.getenv("API_KEY")
 if not api_key:
     raise ValueError("API_KEY environment variable not set")
 
-# Initialize the GenAI client
-client = genai.Client(api_key=api_key)
+# Configure the GenAI client
+configure(api_key=api_key)
 
 # Initialize FastAPI app
 app = FastAPI()
-
-
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -69,17 +66,16 @@ async def process_audio(file: UploadFile = File(...)):
 
         # Generate response using GenAI
         try:
-            response = await client.models.generate_content(
-                model="gemini-2.0-flash-exp",
-                contents=recognized_text
+            response = generate_text(
+                model="model-name",  # Replace with the correct model name (e.g., "text-bison-001")
+                prompt=recognized_text
             )
-            logger.info(f"Generated response: {response.text}")
+            logger.info(f"Generated response: {response['candidates'][0]['output']}")
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Error generating response from GenAI: {e}")
 
-        return {"recognized_text": recognized_text, "generated_response": response.text}
+        return {"recognized_text": recognized_text, "generated_response": response['candidates'][0]['output']}
 
     except Exception as e:
         logger.error(f"Error processing audio: {str(e)}")
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {e}")
-

@@ -1,23 +1,30 @@
-# this will convert speech to text 
+from google import genai
+import os
+from dotenv import load_dotenv
+import speech_recognition as sr
 
-from speech_recognition import Recognizer, AudioFile, UnknownValueError, RequestError
+# Load environment variables from .env file
+load_dotenv()
 
-def speech_to_text(audio_data):
-    recognizer = Recognizer()
-    with AudioFile(audio_data) as source:
-        recognizer.adjust_for_ambient_noise(source, duration=0.5)
-        audio_content = recognizer.record(source)
+# Access the API key from the environment variable
+api_key = os.getenv("API_KEY")
 
-    try:
-        recognized_text = recognizer.recognize_google(audio_content)
-        return recognized_text
-    except UnknownValueError:
-        raise Exception("Speech Recognition could not understand the audio")
-    except RequestError as e:
-        raise Exception(f"Error with Google Speech Recognition service: {e}")
-    
-def test_speech_to_text():
-    audio_data = "path/to/audio/file"
-    recognized_text = speech_to_text(audio_data)
-    assert recognized_text == "Hello, how are you?"
+client = genai.Client(api_key=api_key)
 
+r = sr.Recognizer()
+with sr.Microphone() as source:
+    print("Hey! What do you want to know?")
+    audio = r.listen(source)
+
+try:
+    text = r.recognize_google(audio)
+    print("Google Speech Regognition thinks you asked: " + text)
+
+except sr.UnknownValueError:
+    print("Google Speech Recognition could not understand audio")
+
+except sr.RequestError as e:
+    print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+response = client.models.generate_content(model='gemini-2.0-flash-exp', contents=text)
+print(response.text)
